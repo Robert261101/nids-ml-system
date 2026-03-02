@@ -2,13 +2,17 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import predictRoutes from "./routes/predict.routes.js";
+import { requestId } from "./middlewares/requestId.middleware.js";
+import { applySecurity } from "./security.js";
 
 dotenv.config();
 
 const app = express();
 
+applySecurity(app);
 app.use(cors());
 app.use(express.json());
+app.use(requestId);
 
 // Health route
 app.get("/health", (req, res) => {

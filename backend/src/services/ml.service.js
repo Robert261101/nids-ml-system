@@ -1,14 +1,22 @@
 import axios from "axios";
+import fs from "fs";
+import FormData from "form-data";
 
-export const callMLService = async (data) => {
-  const ML_URL = process.env.ML_SERVICE_URL;
+const ML_URL = process.env.ML_SERVICE_URL;
 
+export const mlPredictCsv = async (filePath) => {
   if (!ML_URL) {
     throw new Error("ML_SERVICE_URL is missing in backend/.env");
   }
 
-  const response = await axios.post(`${ML_URL}/predict`, data, {
-    headers: { "Content-Type": "application/json" },
+  const form = new FormData();
+  form.append("file", fs.createReadStream(filePath));
+
+  const response = await axios.post(`${ML_URL}/predict/csv`, form, {
+    headers: form.getHeaders(),
+    timeout: 15000,          // 15s
+    maxBodyLength: Infinity, // allow streaming
+    maxContentLength: Infinity,
   });
 
   return response.data;
