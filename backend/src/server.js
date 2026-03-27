@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import predictRoutes from "./routes/predict.routes.js";
 import { requestId } from "./middlewares/requestId.middleware.js";
 import { applySecurity } from "./security.js";
+import historyRoutes from "./routes/history.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 dotenv.config();
 
@@ -21,6 +23,8 @@ app.get("/health", (req, res) => {
 
 // Predict routes
 app.use("/api", predictRoutes);
+app.use("/api", historyRoutes);
+app.use("/api", authRoutes);
 
 const PORT = process.env.PORT || 5000;
 

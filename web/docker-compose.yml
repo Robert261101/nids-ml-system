@@ -8,6 +8,7 @@ services:
       - "3000:5000"
     depends_on:
       - ml-service
+      - postgres
     networks:
       - internal
     security_opt:
@@ -32,7 +33,23 @@ services:
       - /tmp
     cap_drop:
       - ALL
+  
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nids
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
 
 networks:
   internal:
     driver: bridge
+
+volumes:
+  postgres_data:
