@@ -2,8 +2,10 @@ node_modules
 __pycache__
 .env
 venv
+.venv
 dist
 build
 data/cicids2017/raw/
 data/cicids2017/processed/
+ml-service/artifacts/
 steps_start-test_app
