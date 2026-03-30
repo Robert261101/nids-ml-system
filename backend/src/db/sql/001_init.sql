@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS predictions (
   rows            INT NOT NULL,
   attacks_count   INT NOT NULL,
   benign_count    INT NOT NULL,
-  output_json     JSONB NOT NULL
+  output_json     JSONB NOT NULL,
+  explanation_sample_json JSONB
 );
 
 CREATE INDEX IF NOT EXISTS idx_predictions_request_id ON predictions(request_id);
@@ -20,5 +21,6 @@ CREATE TABLE IF NOT EXISTS alerts (
     severity TEXT,
     mitre_tactics TEXT[],
     mitre_techniques TEXT[],
+    explanation_row_index integer,
     summary TEXT
 );

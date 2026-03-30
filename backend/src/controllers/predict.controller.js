@@ -30,8 +30,8 @@ export const predictHandler = async (req, res) => {
     }
 
     const resultDb = await query(
-      `INSERT INTO predictions (request_id, model_version, input_filename, rows, attacks_count, benign_count, output_json)
-      VALUES ($1,$2,$3,$4,$5,$6,$7)
+      `INSERT INTO predictions (request_id, model_version, input_filename, rows, attacks_count, benign_count, output_json, explanation_sample_json)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
       RETURNING id`,
       [
         requestId,
@@ -41,11 +41,13 @@ export const predictHandler = async (req, res) => {
         attacks,
         benign,
         JSON.stringify(result),
+        JSON.stringify(explanationSample),
       ]
     );
 
     const predictionId = resultDb.rows[0].id;
 
+    console.log("attacks:", attacks, "benign:", benign);  
     await generateAlert(predictionId, {
       attacks_count: attacks,
       benign_count: benign

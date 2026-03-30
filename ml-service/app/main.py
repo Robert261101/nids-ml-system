@@ -1,8 +1,9 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 import pandas as pd
 from io import BytesIO
+from app.explain import explain_row
 
-from app.schemas import FlowBatch, PredictionBatchResponse, PredictionResult
+from app.schemas import FlowBatch, PredictionBatchResponse, PredictionResult, ExplainResponse,ExplainRequest
 from app.model import model_service
 
 app = FastAPI()
@@ -35,6 +36,15 @@ def predict(data: FlowBatch):
         ]
     )
 
+
+@app.post("/explain", response_model=ExplainResponse)
+def explain(payload: ExplainRequest):
+    try:
+        result = explain_row(payload.features)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Explain failed: {str(e)}")
+    
 
 @app.post("/predict/csv", response_model=PredictionBatchResponse)
 async def predict_csv(file: UploadFile = File(...)):

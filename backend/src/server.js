@@ -2,10 +2,13 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import predictRoutes from "./routes/predict.routes.js";
+import alertsRoutes from "./routes/alerts.routes.js";
 import { requestId } from "./middlewares/requestId.middleware.js";
 import { applySecurity } from "./security.js";
 import historyRoutes from "./routes/history.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import metricsRoutes from "./routes/metrics.routes.js";
+import explanationsRoutes from "./routes/explanations.routes.js";
 
 dotenv.config();
 
@@ -25,6 +28,9 @@ app.get("/health", (req, res) => {
 app.use("/api", predictRoutes);
 app.use("/api", historyRoutes);
 app.use("/api", authRoutes);
+app.use("/api", alertsRoutes);
+app.use("/api", metricsRoutes);
+app.use("/api", explanationsRoutes);
 
 const PORT = process.env.PORT || 5000;
 

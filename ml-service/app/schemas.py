@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 
 # One network flow row (features as key-value pairs)
@@ -21,3 +21,20 @@ class PredictionResult(BaseModel):
 # Response for batch
 class PredictionBatchResponse(BaseModel):
     predictions: List[PredictionResult]
+
+
+class ExplainRequest(BaseModel):
+    features: Dict[str, Any]
+
+
+class ShapFeatureContribution(BaseModel):
+    feature: str
+    value: Any
+    shap_value: float
+    direction: str
+
+
+class ExplainResponse(BaseModel):
+    predicted_label: int
+    probability: Optional[float] = None
+    top_features: List[ShapFeatureContribution]
